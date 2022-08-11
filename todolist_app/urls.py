@@ -1,4 +1,4 @@
-from django.urls import path,include
+from django.urls import path
 from todolist_app import views
 
 urlpatterns = [
