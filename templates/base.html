@@ -27,6 +27,21 @@
             <a class="nav-item nav-link" href="{%url 'about' %}">About Us</a>
           </div>
         </div>
+        {% if user.is_authenticated %}
+        <div class="form-inline my-2 my-lg-0">
+          <div class="p-2 text-white">Logged in as {{user.username}}</div>
+          <a href="{%url 'logout' %}">
+            <button class="btn btn-primary my-2 my-sm-0" type="submit">Logout</button>
+          </a>
+        </div>
+        {% else %}
+        <a href="{%url 'login' %}">
+          <button class="btn btn-success mr-2 my-2 my-sm-0" type="submit">Login</button>
+        </a>
+        <a  href="{%url 'register' %}">
+          <button class="btn btn-primary my-2 my-sm-0" type="submit">Register</button>
+        </a>
+        {% endif %}
       </nav>
   </head>
   <body class='bg-light'>

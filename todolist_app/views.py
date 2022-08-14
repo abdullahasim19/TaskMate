@@ -7,9 +7,11 @@ from todolist_app.models import TaskList
 from todolist_app.forms import TaskForm
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
+@login_required
 def todolist(request):
     if request.method=='POST':
         form=TaskForm(request.POST or None)
@@ -24,23 +26,27 @@ def todolist(request):
         all_tasks=paginator.get_page(page)
         return render(request,'todolist.html',{'all_tasks':all_tasks})
 
+@login_required
 def delete_task(request,task_id):
     task=TaskList.objects.get(pk=task_id) # fetching the task
     task.delete()
     return redirect('todolist')
 
+@login_required
 def complete_task(request,task_id):
     task=TaskList.objects.get(pk=task_id) # fetching the task
     task.done=True
     task.save()
     return redirect('todolist')
 
+@login_required
 def pending_task(request,task_id):
     task=TaskList.objects.get(pk=task_id) # fetching the task
     task.done=False
     task.save()
     return redirect('todolist')
 
+@login_required
 def edit_task(request,task_id):
     if request.method=='POST':
         task=TaskList.objects.get(pk=task_id) # fetching the task
