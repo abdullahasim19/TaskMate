@@ -16,11 +16,12 @@ def todolist(request):
     if request.method=='POST':
         form=TaskForm(request.POST or None)
         if form.is_valid():
+            form.save(commit=False).manage=request.user
             form.save()
             messages.success(request,('New Task Added'))
         return redirect('todolist')
     else:
-        all_tasks=TaskList.objects.all()
+        all_tasks=TaskList.objects.filter(manage=request.user)
         paginator=Paginator(all_tasks,5)
         page=request.GET.get('pg')
         all_tasks=paginator.get_page(page)
@@ -29,21 +30,30 @@ def todolist(request):
 @login_required
 def delete_task(request,task_id):
     task=TaskList.objects.get(pk=task_id) # fetching the task
-    task.delete()
+    if task.manage == request.user:
+        task.delete()
+    else:
+        messages.error(request,('Restricted'))
     return redirect('todolist')
 
 @login_required
 def complete_task(request,task_id):
     task=TaskList.objects.get(pk=task_id) # fetching the task
-    task.done=True
-    task.save()
+    if task.manage == request.user:
+        task.done=True
+        task.save()
+    else:
+        messages.error(request,('Restricted'))
     return redirect('todolist')
 
 @login_required
 def pending_task(request,task_id):
     task=TaskList.objects.get(pk=task_id) # fetching the task
-    task.done=False
-    task.save()
+    if task.manage == request.user:
+        task.done=False
+        task.save()
+    else:
+        messages.error(request,('Restricted'))
     return redirect('todolist')
 
 @login_required
