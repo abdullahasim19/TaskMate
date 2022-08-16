@@ -72,16 +72,10 @@ def edit_task(request,task_id):
         return render(request,'edit.html',{'task_obj':task_obj})
 
 def contact(request):
-    context={
-        'contact_text':"'Welcome Contact"
-    }
-    return render(request,'contact.html',context)
+    return render(request,'contact.html',{})
 
 def about(request):
-    context={
-        'about_text':"'Welcome About"
-    }
-    return render(request,'about.html',context)
+    return render(request,'about.html',{})
 
 def index(request):
     context={
